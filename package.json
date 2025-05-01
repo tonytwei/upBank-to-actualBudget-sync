@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@actual-app/api": "^25.4.0",
+    "@codegenie/serverless-express": "^4.16.0",
+    "axios": "^1.7.8",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "koa": "^2.16.1",
+    "koa-bodyparser": "^4.4.1",
+    "serverless-http": "^3.2.0",
+    "up-bank-api": "^1.5.2"
+  }
+}
