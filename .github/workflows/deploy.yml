@@ -1,0 +1,40 @@
+name: Deploy Lambda Layer and Update Function
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli zip
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Build and deploy Lambda layer and function
+        run: |
+          npm install
+          mkdir nodejs
+          mv node_modules nodejs/
+          zip -r layer.zip nodejs
+          ver=$(aws lambda publish-layer-version --layer-name up-to-actual-deps --zip-file fileb://layer.zip --query Version --output text)
+          aws lambda update-function-configuration --function-name up-to-actual --layers arn:aws:lambda:us-east-1:901220091696:layer:up-to-actual-deps:$ver
