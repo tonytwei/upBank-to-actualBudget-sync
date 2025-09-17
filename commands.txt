@@ -1,0 +1,7 @@
+rm -rf package-lock.json node_modules/ nodejs/ && \
+npm install && \
+mkdir nodejs && \
+mv node_modules nodejs/ && \
+zip -r layer.zip nodejs && \
+ver=$(aws lambda publish-layer-version --layer-name up-to-actual-deps --zip-file fileb://layer.zip --query Version --output text) && \
+aws lambda update-function-configuration --function-name up-to-actual --layers arn:aws:lambda:us-east-1:901220091696:layer:up-to-actual-deps:$ver

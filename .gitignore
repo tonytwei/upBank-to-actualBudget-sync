@@ -1,3 +1,6 @@
+aws_secret
+package-lock.json
+
 # Logs
 logs
 *.log
