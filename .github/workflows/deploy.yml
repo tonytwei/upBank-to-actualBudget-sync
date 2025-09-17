@@ -21,7 +21,9 @@ jobs:
       - name: Install AWS CLI
         run: |
           sudo apt-get update
-          sudo apt-get install -y awscli zip
+          sudo apt-get install -y python3-pip zip
+          pip install --upgrade --user awscli
+          export PATH=$PATH:~/.local/bin
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -32,6 +34,7 @@ jobs:
 
       - name: Build and deploy Lambda layer and function
         run: |
+          export PATH=$PATH:~/.local/bin
           npm install
           mkdir nodejs
           mv node_modules nodejs/
